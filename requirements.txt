@@ -1,0 +1,15 @@
+Flask
+mysql-connector-python
+Werkzeug
+pytesseract
+opencv-python
+numpy
+pandas
+scikit-learn
+nltk
+Pillow
+reportlab
+matplotlib
+openpyxl
+pdf2image
+easyocr

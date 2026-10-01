@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Question Paper - {{ key.exam_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('answer_key.list_answer_keys') }}" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <div>
+        <h3 class="mb-0">Question Paper</h3>
+        <div class="text-secondary small">
+            {{ key.exam_name }} &middot; {{ key.subject_name }} ({{ key.subject_code }})
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-transparent">
+        <i class="bi bi-upload me-2"></i>Upload Question Paper
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('answer_key.upload_question_paper', answer_key_id=key.answer_key_id) }}"
+              enctype="multipart/form-data" class="row g-2 align-items-end">
+            <div class="col-md-9">
+                <label class="form-label small text-secondary">File (JPG, PNG, or PDF)</label>
+                <input type="file" name="question_paper_file" accept=".jpg,.jpeg,.png,.pdf" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-upload me-1"></i>Upload
+                </button>
+            </div>
+        </form>
+        <div class="form-text mt-2">Uploading a new file replaces the current question paper for this exam.</div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-transparent">
+        <i class="bi bi-file-earmark-text me-2"></i>Current Question Paper
+    </div>
+    <div class="card-body">
+        {% if key.question_paper_path %}
+        <a href="{{ url_for('answer_key.view_question_paper', answer_key_id=key.answer_key_id) }}"
+           class="btn btn-outline-primary" target="_blank">
+            <i class="bi bi-eye me-1"></i>View Question Paper
+        </a>
+        {% else %}
+        <div class="text-secondary">No question paper uploaded yet.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

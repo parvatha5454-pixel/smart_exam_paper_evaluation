@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ sheet.student_name }} - Exam Answer Analysis System{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('scanning.list_sheets') }}" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <div>
+        <h3 class="mb-0">{{ sheet.student_name }} <span class="text-secondary small">({{ sheet.roll_number }})</span></h3>
+        <div class="text-secondary small">{{ sheet.exam_name }} &middot; {{ sheet.subject_name }}</div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent">
+                <i class="bi bi-image me-2"></i>Original
+            </div>
+            <div class="card-body text-center">
+                <img src="{{ url_for('scanning.serve_scanned_file', filename=sheet.original_image_path.split('/')[-1].split('\\')[-1]) }}"
+                     class="img-fluid rounded border" alt="Original scanned sheet">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent">
+                <i class="bi bi-magic me-2"></i>Processed (cleaned for OCR)
+            </div>
+            <div class="card-body text-center">
+                {% if sheet.processed_image_path %}
+                <img src="{{ url_for('scanning.serve_scanned_file', filename=sheet.processed_image_path.split('/')[-1].split('\\')[-1]) }}"
+                     class="img-fluid rounded border" alt="Processed scanned sheet">
+                {% else %}
+                <div class="text-secondary p-4">Not processed yet.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

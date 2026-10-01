@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Answer Keys - Exam Answer Analysis System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0"><i class="bi bi-key-fill me-2"></i>Answer Keys</h3>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('answer_key.list_subjects') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-journal-bookmark me-1"></i>Manage Subjects
+        </a>
+        <a href="{{ url_for('answer_key.add_answer_key') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>New Answer Key
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small text-secondary">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Exam name, subject..." value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small text-secondary">Department</label>
+                <input type="text" name="department" class="form-control" placeholder="Department" value="{{ department }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small text-secondary">Semester</label>
+                <input type="text" name="semester" class="form-control" placeholder="Semester" value="{{ semester }}">
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-outline-primary flex-grow-1">
+                    <i class="bi bi-search"></i>
+                </button>
+                <a href="{{ url_for('answer_key.list_answer_keys') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        {% if keys %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>Exam Name</th>
+                        <th>Subject</th>
+                        <th>Department</th>
+                        <th>Semester</th>
+                        <th>Questions</th>
+                        <th>Total Marks</th>
+                        <th>Created</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for k in keys %}
+                    <tr>
+                        <td>{{ k.exam_name }}</td>
+                        <td>{{ k.subject_name }} <span class="text-secondary small">({{ k.subject_code }})</span></td>
+                        <td>{{ k.department or '-' }}</td>
+                        <td>{{ k.semester or '-' }}</td>
+                        <td><span class="badge bg-secondary">{{ k.question_count }}</span></td>
+                        <td>{{ k.total_marks }}</td>
+                        <td class="text-secondary small">{{ k.created_at }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('answer_key.preview_answer_key', answer_key_id=k.answer_key_id) }}"
+                               class="btn btn-sm btn-outline-info" title="Preview">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ url_for('answer_key.question_paper_page', answer_key_id=k.answer_key_id) }}"
+                               class="btn btn-sm btn-outline-secondary" title="Question Paper (Upload / View)">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </a>
+                            <a href="{{ url_for('answer_key.edit_answer_key', answer_key_id=k.answer_key_id) }}"
+                               class="btn btn-sm btn-outline-secondary" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form method="POST" class="d-inline"
+                                  action="{{ url_for('answer_key.delete_answer_key_route', answer_key_id=k.answer_key_id) }}"
+                                  onsubmit="return confirm('Delete this answer key and all its questions? This cannot be undone.');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-4 text-center text-secondary">
+            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+            No answer keys found.
+            {% if not subjects %}
+            <div class="mt-2">You'll need to <a href="{{ url_for('answer_key.list_subjects') }}">add a subject</a> first.</div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

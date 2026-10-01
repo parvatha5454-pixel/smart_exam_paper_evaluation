@@ -1,0 +1,28 @@
+# Virtual environment - never push this (huge, machine-specific)
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Uploaded/scanned files - personal student data, don't push
+app/uploads/
+app/scanned_answers/
+app/reports/
+app/answer_keys/
+
+# Config file with real DB password - keep this out of GitHub
+# (push config.example.py instead, see below)
+config.py
+
+# IDE settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

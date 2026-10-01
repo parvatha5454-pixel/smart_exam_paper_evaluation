@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if key else 'New' }} Answer Key - Exam Answer Analysis System{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('answer_key.list_answer_keys') }}" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <h3 class="mb-0">
+        <i class="bi bi-key-fill me-2"></i>{{ 'Edit Answer Key' if key else 'New Answer Key' }}
+    </h3>
+</div>
+
+<div class="card border-0 shadow-sm" style="max-width: 640px;">
+    <div class="card-body p-4">
+        {% if not subjects %}
+        <div class="alert alert-warning">
+            No subjects yet. <a href="{{ url_for('answer_key.list_subjects') }}">Add a subject first</a>.
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Subject</label>
+                <select name="subject_id" class="form-select" required {{ 'disabled' if not subjects else '' }}>
+                    <option value="">-- Select subject --</option>
+                    {% for s in subjects %}
+                    <option value="{{ s.subject_id }}"
+                        {% if key and key.subject_id == s.subject_id %}selected{% endif %}>
+                        {{ s.subject_name }} ({{ s.subject_code }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Exam Name</label>
+                <input type="text" name="exam_name" class="form-control"
+                       placeholder="e.g. Semester 5 Final Exam"
+                       value="{{ key.exam_name if key else '' }}" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Department</label>
+                    <input type="text" name="department" class="form-control"
+                           value="{{ key.department if key else '' }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Semester</label>
+                    <input type="text" name="semester" class="form-control"
+                           value="{{ key.semester if key else '' }}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" {{ 'disabled' if not subjects else '' }}>
+                <i class="bi bi-check-lg me-1"></i>{{ 'Save Changes' if key else 'Create & Add Questions' }}
+            </button>
+            <a href="{{ url_for('answer_key.list_answer_keys') }}" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}OCR Preview - {{ sheet.student_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('evaluation.view_evaluation', sheet_id=sheet.sheet_id) }}" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <div>
+        <h3 class="mb-0">Raw OCR Text</h3>
+        <div class="text-secondary small">{{ sheet.student_name }} ({{ sheet.roll_number }}) &middot; {{ sheet.exam_name }}</div>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <i class="bi bi-info-circle me-1"></i>
+    This is exactly what Tesseract OCR read from the scanned sheet. If this text
+    looks garbled or very different from the actual handwritten answers, that's
+    why keyword matching is scoring low &mdash; Tesseract is built for typed/printed
+    text and struggles with handwriting. Nothing here has been saved.
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <pre class="small" style="white-space: pre-wrap;">{{ ocr_text or '(No text detected)' }}</pre>
+    </div>
+</div>
+{% endblock %}
